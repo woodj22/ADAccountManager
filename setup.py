@@ -8,4 +8,7 @@ setup(name='UnlockAccount',
       author_email='joe.wood@bbc.co.uk',
       license='MIT',
       packages=['UnlockAccount'],
+      entry_points = {
+        'console_scripts': ['run=UnlockAccount.command_line:main'],
+      },
       zip_safe=False)
