@@ -11,4 +11,7 @@ setup(name='UnlockAccount',
       entry_points = {
         'console_scripts': ['run=UnlockAccount.command_line:main'],
       },
+      install_requires = [
+            'python-ldap',
+      ],
       zip_safe=False)
