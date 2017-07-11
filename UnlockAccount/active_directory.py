@@ -6,25 +6,41 @@ class ActiveDirectory(object):
     searchScope = ldap.SCOPE_SUBTREE
     retrieveAttributes = None
 
-    def __init__(self, accountName):
+    def __init__(self):
         self.l = ldap.initialize("ldap://ldap.national.core.bbc.co.uk:3268")
         self.l.simple_bind(LDAP_USERNAME, LDAP_PASSWORD)
-        self.searchFilter = "(&(objectCategory=Person)(objectClass=User)(samaccountname="+accountName+"))"
-    def main(self):
+
+    def search(self, search_filter):
         try:
-            ldap_result_id = self.l.search(self.baseDN,  self.searchScope,  self.searchFilter,  self.retrieveAttributes)
-            result_set = []
+            ldap_result_id = self.l.search(self.baseDN, self.searchScope, search_filter,
+                                                           self.retrieveAttributes)
             while 1:
                 result_type, result_data = self.l.result(ldap_result_id, 0)
-                if (result_data == []):
-                    break
+                if (result_data):
+                    return result_data[0]
                 else:
-                    ## here you don't have to append to a list
-                    ## you could do whatever you want with the individual entry
-                    ## The appending to list is just for illustration.
-                    if result_type == ldap.RES_SEARCH_ENTRY:
-                        result_set.append(result_data)
-            print result_set
+                    break
         except ldap.LDAPError, e:
             print e
-        self.l.unbind()
+        self.l.unbind_s()
+
+    def search_by_account_name(self, accountName):
+        searchFilter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + accountName + "))"
+        return self.search(searchFilter)
+
+    def search_by_user_dn(self, user_dn):
+        search_filter = "(distinguishedname=" + user_dn +")"
+        return self.search(search_filter)
+
+
+    def change_password(self,user_dn ,new_password):
+        unicode_pass = unicode('\"' + str(new_password) + '\"', 'iso-8859-1')
+        password_value = unicode_pass.encode('utf-16-le')
+        add_pass = [(ldap.MOD_REPLACE, 'unicodePwd', [password_value])]
+        try:
+            self.l.modify_s(user_dn, add_pass)
+            self.l.unbind_s()
+        except ldap.LDAPError, e:
+            print e
+
+        self.l.unbind_s()
