@@ -8,21 +8,15 @@ class ActiveDirectory(object):
 
     def __init__(self):
         self.l = ldap.initialize("ldap://ldap.national.core.bbc.co.uk:3268")
-        self.l.simple_bind(LDAP_USERNAME, LDAP_PASSWORD)
+        self.l.bind_s(LDAP_USERNAME, LDAP_PASSWORD)
 
     def search(self, search_filter):
         try:
-            ldap_result_id = self.l.search(self.baseDN, self.searchScope, search_filter,
-                                                           self.retrieveAttributes)
-            while 1:
-                result_type, result_data = self.l.result(ldap_result_id, 0)
-                if (result_data):
-                    return result_data[0]
-                else:
-                    break
+            ldap_result_id = self.l.search_s(self.baseDN, self.searchScope, search_filter, self.retrieveAttributes)
+            return ldap_result_id[0]
         except ldap.LDAPError, e:
             print e
-        self.l.unbind_s()
+        self.l.unbind()
 
     def search_by_account_name(self, accountName):
         searchFilter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + accountName + "))"
@@ -34,13 +28,17 @@ class ActiveDirectory(object):
 
 
     def change_password(self,user_dn ,new_password):
+
+        #For test purposes i have spoofed the user_dn and new_password values
+        user_dn = "CN=joe.wood,OU=london,OU=deputy director general group,OU=Atos London,OU=Roaming,OU=Interactive,OU=Users,OU=Standard,OU=Business,DC=national,DC=core,DC=bbc,DC=co,DC=uk"
+        new_password = "Hello123"
         unicode_pass = unicode('\"' + str(new_password) + '\"', 'iso-8859-1')
         password_value = unicode_pass.encode('utf-16-le')
         add_pass = [(ldap.MOD_REPLACE, 'unicodePwd', [password_value])]
         try:
             self.l.modify_s(user_dn, add_pass)
-            self.l.unbind_s()
         except ldap.LDAPError, e:
+            self.l.unbind_ext_s()
             print e
 
-        self.l.unbind_s()
+        self.l.unbind_ext_s()
