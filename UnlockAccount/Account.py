@@ -1,10 +1,10 @@
-import active_directory, sys , getopt, argparse
-
+import argparse
+from activedirectory import ActiveDirectory
 def main(account_details):
-    ad = active_directory.ActiveDirectory()
-    user = ad.search_by_account_name(account_details.account_name)
-    dn = user[0]
-   # ad.change_password('woodj22','Hello123')
+    ad = ActiveDirectory()
+    # user = ad.search_by_account_name(accountName=account_details.account_name)
+    # dn = user[0]
+    ad.change_password('woodj22' ,new_password='Hello123')
 
 
 if __name__ == "__main__":
