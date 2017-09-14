@@ -1,11 +1,15 @@
 import argparse
 from activedirectory.active_directory import ActiveDirectory
+from ldap3 import Server, ALL
 
 
 def main(account_details):
-    ad = ActiveDirectory()
-    # user = ad.search_by_account_name(accountName=account_details.account_name)
-    # dn = user[0]
+    server = Server("ldap://ldap.national.core.bbc.co.uk", get_info=ALL)
+    baseDN = 'DC=national,DC=core,DC=bbc,DC=co,DC=uk'
+    ad = ActiveDirectory(server, baseDN)
+
+    user = ad.search_by_account_name(account_name=account_details.account_name)
+    exit(user)
     ad.change_password('woodj22' ,new_password='Hello123')
 
 
