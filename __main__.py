@@ -1,5 +1,7 @@
 import argparse
-from activedirectory import ActiveDirectory
+from activedirectory.active_directory import ActiveDirectory
+
+
 def main(account_details):
     ad = ActiveDirectory()
     # user = ad.search_by_account_name(accountName=account_details.account_name)

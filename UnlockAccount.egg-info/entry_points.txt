@@ -1,3 +1,0 @@
-[console_scripts]
-run = UnlockAccount.command_line:main
-
