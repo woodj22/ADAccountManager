@@ -1,11 +1,11 @@
-from config import LDAP_PASSWORD, LDAP_USERNAME
+from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD
 from ldap3 import Connection
 
 class ActiveDirectory(Connection):
 
     def __init__(self, server, base_dn):
         self.baseDN = base_dn
-        super(ActiveDirectory, self).__init__(server=server, user=LDAP_USERNAME, password=LDAP_PASSWORD, auto_bind=True)
+        super(ActiveDirectory, self).__init__(server=server, user=LDAP_ADMIN_USERNAME, password=LDAP_ADMIN_PASSWORD, auto_bind=True)
         self.start_tls()
 
     def formatted_search(self, search_filter):
