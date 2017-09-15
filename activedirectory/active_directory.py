@@ -3,10 +3,10 @@ from ldap3 import Connection
 
 class ActiveDirectory(Connection):
 
-
     def __init__(self, server, base_dn):
         self.baseDN = base_dn
         super(ActiveDirectory, self).__init__(server=server, user=LDAP_USERNAME, password=LDAP_PASSWORD, auto_bind=True)
+        self.start_tls()
 
     def formatted_search(self, search_filter):
         self.search(self.baseDN, search_filter)
@@ -20,10 +20,14 @@ class ActiveDirectory(Connection):
         search_filter = "(distinguishedname=" + user_dn +")"
         return self.formatted_search(search_filter)
 
-    def change_password(self, user_dn, new_password):
-        self.extend.microsoft.modify_password(user_dn, new_password, None)
+    def get_user_dn(self, account_name):
+        return self.search_by_account_name(account_name).get('dn')
+
+    def change_password(self, account_name, new_password):
+        return self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
 
     def __del__(self):
-       self.unbind()
+        print('unbind')
+       #self.unbind()
 
 
