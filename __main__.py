@@ -4,7 +4,7 @@ from ldap3 import Server, ALL
 
 
 def get_domain_server(domain):
-    if domain is 'national' or not domain:
+    if domain in ('national', None):
         return (Server("ldap://ldap.national.core.bbc.co.uk", get_info=ALL), 'DC=national,DC=core,DC=bbc,DC=co,DC=uk')
 
     if domain is 'international':
