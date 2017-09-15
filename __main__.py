@@ -1,10 +1,10 @@
 import argparse
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
-global server
+
 
 def get_domain_server(domain):
-    if domain is 'national':
+    if domain is 'national' or not domain:
         return (Server("ldap://ldap.national.core.bbc.co.uk", get_info=ALL), 'DC=national,DC=core,DC=bbc,DC=co,DC=uk')
 
     if domain is 'international':
@@ -13,8 +13,6 @@ def get_domain_server(domain):
     if domain is 'worldwide':
         return (Server("ldap://ldap.worldwide.core.bbc.co.uk", get_info=ALL), 'DC=worldwide,DC=core,DC=bbc,DC=co,DC=uk')
 
-    if not domain:
-        return (Server("ldap://ldap.national.core.bbc.co.uk", get_info=ALL), 'DC=national,DC=core,DC=bbc,DC=co,DC=uk')
 
 def main(account_details):
     server = get_domain_server(account_details.domain)
