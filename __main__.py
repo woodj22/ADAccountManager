@@ -6,6 +6,7 @@ def main(account_details):
     server = Server("ldap://ldap.national.core.bbc.co.uk", get_info=ALL)
     baseDN = 'DC=national,DC=core,DC=bbc,DC=co,DC=uk'
     ad = ActiveDirectory(server, baseDN)
+
     if account_details.new_password :
         return ad.change_password(account_name=account_details.account_name , new_password=account_details.new_password)
     else:

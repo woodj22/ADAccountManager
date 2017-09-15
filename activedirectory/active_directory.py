@@ -1,5 +1,5 @@
 from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD
-from ldap3 import Connection
+from ldap3 import Connection, MODIFY_REPLACE
 
 class ActiveDirectory(Connection):
 
@@ -13,12 +13,15 @@ class ActiveDirectory(Connection):
         return self.response[0]
 
     def search_by_account_name(self, account_name):
-        searchFilter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + account_name + "))"
-        return self.formatted_search(searchFilter)
+        search_filter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + account_name + "))"
+        return self.formatted_search(search_filter)
 
     def search_by_user_dn(self, user_dn):
         search_filter = "(distinguishedname=" + user_dn +")"
         return self.formatted_search(search_filter)
+
+    def unlock_account(self, account_name):
+        return self.modify(dn=self.get_user_dn(account_name=account_name),changes={'lockouttime': [MODIFY_REPLACE, [0]]})
 
     def get_user_dn(self, account_name):
         return self.search_by_account_name(account_name).get('dn')
