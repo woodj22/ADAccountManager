@@ -25,9 +25,9 @@ def main(account_details):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    p = parser.add_argument('--new_password',type = str , dest='new_password')
-    p = parser.add_argument('--username',type = str, dest='account_name')
-    p = parser.add_argument('--domain',type = str, dest='domain')
+    p = parser.add_argument('--new_password', type=str , dest='new_password')
+    p = parser.add_argument('--username', type=str, dest='account_name')
+    p = parser.add_argument('--domain', type=str, dest='domain')
     args = parser.parse_args()
     main(args)
 
