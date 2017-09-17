@@ -14,6 +14,7 @@ def get_domain_server(domain):
     if domain is 'worldwide':
         return Server("ldap://ldap.worldwide.core.bbc.co.uk", get_info=ALL), 'DC=worldwide,DC=core,DC=bbc,DC=co,DC=uk'
 
+
 @click.command()
 @click.option('--admin_user', help='The account name of the administrator.')
 @click.option('--admin_password', help='The password of the administrator.')
@@ -25,6 +26,9 @@ def main(admin_user, admin_password, account_name, domain, new_password):
     if admin_user is None:
         admin_user = LDAP_ADMIN_USERNAME
         admin_password = LDAP_ADMIN_PASSWORD
+    print(admin_user)
+    print(account_name)
+    exit()
     ad = ActiveDirectory(*server, admin_user, admin_password)
 
     if new_password:
