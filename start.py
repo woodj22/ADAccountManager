@@ -14,6 +14,7 @@ def get_domain_server(domain):
     if domain is 'worldwide':
         return Server("ldap://ldap.worldwide.core.bbc.co.uk", get_info=ALL), 'DC=worldwide,DC=core,DC=bbc,DC=co,DC=uk'
 
+
 @click.command()
 @click.option('--admin_user', help='The account name of the administrator.')
 @click.option('--admin_password', help='The password of the administrator.')
