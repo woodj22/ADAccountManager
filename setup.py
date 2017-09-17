@@ -11,4 +11,9 @@ setup(name='ADAccountManager',
       author_email='joe.wood@bbc.co.uk',
       license='MIT',
       install_requires=['ldap3', 'Click'],
+      entry_points='''
+      [console_scripts]
+      ADAccountManager=start:main
+      ''',
+      py_modules=['start', 'config'],
       zip_safe=False)
