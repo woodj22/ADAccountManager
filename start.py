@@ -2,7 +2,6 @@ from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
 import click
-import os
 
 
 def get_domain_server(domain):
@@ -36,14 +35,24 @@ def cli(ctx, admin_user, admin_password, account_name, domain):
 @click.pass_context
 @click.argument('new_password')
 def change_password(ctx, new_password):
-    return ctx.obj['ad'].change_password(account_name=ctx.obj['accountName'], new_password=new_password)
-
+    if ctx.obj['ad'].change_password(account_name=ctx.obj['accountName'], new_password=new_password):
+        print("Your password has been changed. You just saved your company some money.")
+        return
+    print("your password has not been changed.")
 
 @cli.command()
 @click.pass_context
 def get_person_details(ctx):
     print(ctx.obj['ad'].search_by_account_name(account_name=ctx.obj['accountName']))
 
+
+@cli.command()
+@click.pass_context
+def unlock_account(ctx):
+    if ctx.obj['ad'].unlock_account(account_name=ctx.obj['accountName']):
+        print("Your account has been unlocked.")
+        return
+    print("Your password has not been unlocked.")
 
 if __name__ == "__main__":
     cli(obj={})

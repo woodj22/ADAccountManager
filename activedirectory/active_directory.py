@@ -29,9 +29,9 @@ class ActiveDirectory(Connection):
     def change_password(self, account_name, new_password):
         return self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
 
-    def __del__(self):
-        print('unbind')
-       #self.unbind()
+    # def __del__(self):
+        # print('unbind')
+        # self.unbind()
 
     @property
     def attributes(self):
