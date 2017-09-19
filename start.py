@@ -2,6 +2,7 @@ from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
 import click
+import os
 
 
 def get_domain_server(domain):
@@ -15,25 +16,35 @@ def get_domain_server(domain):
         return Server("ldap://ldap.worldwide.core.bbc.co.uk", get_info=ALL), 'DC=worldwide,DC=core,DC=bbc,DC=co,DC=uk'
 
 
-@click.command()
+@click.group()
 @click.option('--admin_user', help='The account name of the administrator.')
 @click.option('--admin_password', help='The password of the administrator.')
-@click.option('--account_name', help='The username of the account to be managed.')
+@click.option('--account_name', help='The username of the account to be managed.', required=True)
 @click.option('--domain', help='The domain of the user to be managed.', default='national',  type=click.Choice(['national', 'international', 'worldwide']))
-@click.option('--new_password', help='The domain of the user to be managed.')
-def main(admin_user, admin_password, account_name, domain, new_password):
+@click.pass_context
+def cli(ctx, admin_user, admin_password, account_name, domain):
     server = get_domain_server(domain)
     if admin_user is None:
         admin_user = LDAP_ADMIN_USERNAME
         admin_password = LDAP_ADMIN_PASSWORD
     ad = ActiveDirectory(*server, admin_user, admin_password)
+    ctx.obj['ad'] = ad
+    ctx.obj['accountName'] = account_name
 
-    if new_password:
-        return ad.change_password(account_name=account_name, new_password=new_password)
-    else:
-        print(ad.search_by_account_name(account_name=account_name))
+
+@cli.command()
+@click.pass_context
+@click.argument('new_password')
+def change_password(ctx, new_password):
+    return ctx.obj['ad'].change_password(account_name=ctx.obj['accountName'], new_password=new_password)
+
+
+@cli.command()
+@click.pass_context
+def get_person_details(ctx):
+    print(ctx.obj['ad'].search_by_account_name(account_name=ctx.obj['accountName']))
+
 
 if __name__ == "__main__":
-    main()
-
+    cli(obj={})
 
