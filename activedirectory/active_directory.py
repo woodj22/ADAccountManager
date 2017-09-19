@@ -9,7 +9,7 @@ class ActiveDirectory(Connection):
         self.start_tls()
 
     def formatted_search(self, search_filter):
-        self.search(self.baseDN, search_filter)
+        self.search(self.baseDN, search_filter, attributes=self.attributes)
         return self.response[0]
 
     def search_by_account_name(self, account_name):
@@ -33,4 +33,35 @@ class ActiveDirectory(Connection):
         print('unbind')
        #self.unbind()
 
-
+    @property
+    def attributes(self):
+        return  [
+            'samaccountname',
+            'distinguishedname',
+            'cn',
+            'givenname',
+            'displayname',
+            'personalTitle',
+            'sn',
+            'company',
+            'employeeid',
+            'employeetype',
+            'division',
+            'department',
+            'title',
+            'physicaldeliveryofficename',
+            'extensionattribute13',
+            'telephonenumber',
+            'mobile',
+            'mail',
+            'msrtcsip-line',
+            'bbct-slacode',
+            'bbct-costcentre',
+            'memberof',
+            'msexchextensioncustomattribute5',
+            'msexchhidefromaddresslists',
+            'lastlogon',
+            'useraccountcontrol',
+            'whenchanged',
+            'whencreated',
+        ]
