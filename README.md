@@ -23,3 +23,10 @@ I have tried to make the installation as simple as possible while still keeping 
   
  ### Usage 
  
+It is used as a command line tool where all the options go first followed by the function and its arguments.
+
+for example:
+`ADAccountManager --account_name=woodj22 unlock_account`
+will unlock an account.
+
+For any help just run `ADAccountManager` and it will return a list of all the commands, options and arguments.
