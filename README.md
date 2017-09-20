@@ -1,6 +1,11 @@
 # ADAccountManager
 Manage a active directory user's account using an admin account.
 
+
+### Motiviation
+
+When developing internal tools at the BBC I am forever locking an active directory account out. So why not build a tool that can fix this? Although We use PHP here and we have a tool that does this job, I just wanted to show myself what python can do compared to PHP and have a real world project I could sink my teeth into while i learn python. 
+
 ### Requirements
 
 python3 
@@ -21,7 +26,7 @@ I have tried to make the installation as simple as possible while still keeping 
   Use the correct flags as described in the usage section of this readme file to use all its functionalities correctly. 
   
   
- ### Usage 
+### Usage 
  
 It is used as a command line tool where all the options go first followed by the function and its arguments.
 
@@ -29,4 +34,14 @@ for example:
 `ADAccountManager --account_name=woodj22 unlock_account`
 will unlock an account.
 
+`ADAccountManager --account_name=woodj22 change_password 'newP@ssword'`
+Will set a new password for that user. 
+
+
 For any help just run `ADAccountManager` and it will return a list of all the commands, options and arguments.
+
+### Contribution 
+
+I would be happy for anyone to contribute or suggest any tweaks that should be done. You can contact me via email at joe.wood@bbc.co.uk or use github to create an issue.
+
+If you would like more functionalities to be added just let me know and i can add them. 
