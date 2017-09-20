@@ -1,5 +1,5 @@
 # ADAccountManager
-Manage a active directory user's account using an admin account.
+Manage an active directory user's account using an admin account.
 
 
 ### Motiviation
