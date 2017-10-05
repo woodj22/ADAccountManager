@@ -15,8 +15,10 @@ pass_ad = click.make_pass_decorator(ActiveDirectory)
 @click.group()
 @click.option('--admin_user', help='The account name of the administrator.')
 @click.option('--admin_password', help='The password of the administrator.')
-@click.option('--account_name', help='The username of the account to be managed.', required=True)
-@click.option('--domain', help='The domain of the user to be managed.', default='national',  type=click.Choice(['national', 'international', 'worldwide']))
+@click.option('--base_dn', help='The base dn of the active direction server connection.')
+@click.option('--server_address', help='The server address of the active directory connection.')
+@click.option('--account_name', help='sam account name of the user.', required=True)
+@click.option('--domain', help='The domain of the user.', default='national',  type=click.Choice(['national', 'international', 'worldwide']))
 @click.pass_context
 def cli(ctx, admin_user, admin_password, account_name, domain):
     server = get_domain_server(domain)
@@ -53,5 +55,7 @@ def unlock_account(ad):
 if __name__ == "__main__":
     cli(obj={})
 
+
 def main():
     cli(obj={})
+
