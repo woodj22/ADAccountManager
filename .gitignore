@@ -1,9 +1,8 @@
 config.py
 config.pyc
-.idea/workspace.xml
+.idea/
 .idea/AccountManager.iml
-.idea/misc.xml
-.idea/modules.xml
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
