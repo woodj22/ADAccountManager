@@ -29,7 +29,7 @@ def cli(ctx, admin_user, admin_password, account_name, domain):
 
 @cli.command()
 @pass_ad
-@click.argument('new_password')
+@click.option('--new_password', prompt=True, hide_input=True)
 def change_password(ad, new_password):
     if ad.change_password(account_name=ad.accountName, new_password=new_password):
         print("Your password has been changed. You just saved your company some money.")
