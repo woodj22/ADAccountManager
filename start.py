@@ -25,19 +25,8 @@ def cli(ctx, admin_user, admin_password, account_name, domain, base_dn, server_a
         server = Server(server_address, get_info=ALL), base_dn
     else:
         server = get_domain_server(domain)
-
-    validate_ad_variables_are_not_null(*server, admin_user, admin_password)
     ctx.obj = ActiveDirectory(*server, admin_user, admin_password)
     ctx.obj.accountName = account_name
-
-
-def validate_ad_variables_are_not_null(*variables):
-    null_variables = [var for var in variables if var is '' or None]
-    exit(null_variables)
-    for var in variables:
-        if var is None:
-            return False
-    return True
 
 
 @cli.command()
