@@ -3,7 +3,7 @@ from ldap3 import Connection, MODIFY_REPLACE
 
 class ActiveDirectory(Connection):
 
-    def __init__(self, server, base_dn, admin_username, admin_password, server_address):
+    def __init__(self, server, base_dn, admin_username, admin_password):
         self.baseDN = base_dn
         super(ActiveDirectory, self).__init__(server=server, user=admin_username, password=admin_password, auto_bind=True)
         self.start_tls()
