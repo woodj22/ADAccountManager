@@ -17,8 +17,8 @@ pass_ad = click.make_pass_decorator(ActiveDirectory)
 @click.option('--admin_password', help='The password of the administrator.', default=LDAP_ADMIN_PASSWORD)
 @click.option('--account_name', help='sam account name of the user.', required=True)
 @click.option('--domain', help='The domain of the user.', default='national',  type=click.Choice(['national', 'international', 'worldwide']))
-@click.option('--base_dn', help='The base dn of the active direction server connection.', default=LDAP_SERVER_DEFAULT_DN)
-@click.option('--server_address', help='The server address of the active directory connection.', default=LDAP_SERVER_DEFAULT_ADDRESS)
+@click.option('--base_dn', help='The base dn of the active direction server connection.', default=None)
+@click.option('--server_address', help='The server address of the active directory connection.', default=None)
 @click.pass_context
 def cli(ctx, admin_user, admin_password, account_name, domain, base_dn, server_address):
     if None not in (base_dn, server_address):
