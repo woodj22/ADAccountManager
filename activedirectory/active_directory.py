@@ -10,10 +10,15 @@ class ActiveDirectory(Connection):
 
     def formatted_search(self, search_filter):
         self.search(self.baseDN, search_filter, attributes=self.attributes)
+
         return self.response[0]
 
     def search_by_account_name(self, account_name):
         search_filter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + account_name + "))"
+        response = self.formatted_search(search_filter)
+        if response['type'] is 'searchResRef' :
+            raise ValueError('Cannot find the account name given. Check that you have entered the correct sam account name and domain.')
+
         return self.formatted_search(search_filter)
 
     def search_by_user_dn(self, user_dn):
