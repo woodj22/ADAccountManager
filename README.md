@@ -34,8 +34,9 @@ for example:
 `ADAccountManager --account_name=woodj22 unlock_account`
 will unlock an account.
 
-`ADAccountManager --account_name=woodj22 change_password 'newP@ssword'`
-Will set a new password for that user. 
+`ADAccountManager --account_name=woodj22 change_password`
+
+This will then ask for a password via a secure prompt. Enter in your new password and away you go!
 
 
 For any help just run `ADAccountManager` and it will return a list of all the commands, options and arguments.
