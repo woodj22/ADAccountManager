@@ -28,16 +28,21 @@ I have tried to make the installation as simple as possible while still keeping 
   
 ### Usage 
  
-It is used as a command line tool where all the options go first followed by the function and its arguments.
+It is used as a command line tool where all the options go first followed by the function and its arguments. By default I have set the `domain` to 'National' This is because this is the most used domain within my company and makes it easier for me to use (sorry guys, forgive me).
 
-for example:
+#### Unlock Account
 `ADAccountManager --account_name=woodj22 unlock_account`
-will unlock an account.
 
+#### Change Password
 `ADAccountManager --account_name=woodj22 change_password`
+ 
+ This will then ask for a password via a secure prompt. Enter in your new password and away you go!
+ 
+#### Additional Options
+When using the tool without a config file you MUST add in the details as options. They work as follows:
+`ADAccountManager --account_name=woodj22 --domain=nat --admin_user=svc-ac-1 --addmin_password=P@ss1 --base_dn=DC=nat,DC=c,DC=bcd,DC=co,DC=uk --server_address=http:ldap.nat.bcd.co.uk`
 
-This will then ask for a password via a secure prompt. Enter in your new password and away you go!
-
+This will otherwise throw an error saying which credentials have not been entered correctly. 
 
 For any help just run `ADAccountManager` and it will return a list of all the commands, options and arguments.
 
@@ -45,4 +50,4 @@ For any help just run `ADAccountManager` and it will return a list of all the co
 
 I would be happy for anyone to contribute or suggest any tweaks that should be done. You can contact me via email at joe.wood@bbc.co.uk or use github to create an issue.
 
-If you would like more functionalities to be added just let me know and i can add them. 
+If you would like more functionalities to be added just let me know and i can add them when ever I get a minute.
