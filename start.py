@@ -1,7 +1,7 @@
 from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD, LDAP_SERVER_DEFAULT_ADDRESS, LDAP_SERVER_DEFAULT_DN, LDAP_SERVER_DETAILS
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
-import click
+from flask import Flask
 
 
 def get_domain_server(domain):
@@ -10,52 +10,32 @@ def get_domain_server(domain):
     else:
         return Server(LDAP_SERVER_DEFAULT_ADDRESS, get_info=ALL), LDAP_SERVER_DEFAULT_DN
 
-pass_ad = click.make_pass_decorator(ActiveDirectory)
 
-@click.group()
-@click.option('--admin_user', help='The account name of the administrator.', default=LDAP_ADMIN_USERNAME)
-@click.option('--admin_password', help='The password of the administrator.', default=LDAP_ADMIN_PASSWORD)
-@click.option('--account_name', help='sam account name of the user.', required=True)
-@click.option('--domain', help='The domain of the user.', default='national',  type=click.Choice(['national', 'international', 'worldwide']))
-@click.option('--base_dn', help='The base dn of the active directory server connection.', default=None)
-@click.option('--server_address', help='The server address of the active directory connection.', default=None)
-@click.pass_context
-def cli(ctx, admin_user, admin_password, account_name, domain, base_dn, server_address):
+
+app = Flask(__name__)
+
+
+def adConnection(admin_user, admin_password, domain, base_dn, server_address):
     if None not in (base_dn, server_address):
         server = Server(server_address, get_info=ALL), base_dn
     else:
         server = get_domain_server(domain)
-    ctx.obj = ActiveDirectory(*server, admin_user, admin_password)
-    ctx.obj.accountName = account_name
+    return ActiveDirectory(*server, admin_user, admin_password)
 
-
-@cli.command()
-@pass_ad
-@click.option('--new_password', prompt=True, hide_input=True)
 def change_password(ad, new_password):
     if ad.change_password(account_name=ad.accountName, new_password=new_password):
         print("Your password has been changed. You just saved your company some money.")
         return
     print("your password has not been changed.")
 
-@cli.command()
-@pass_ad
-def get_person_details(ad):
-    print(ad.search_by_account_name(account_name=ad.accountName))
+@app.route('/<domain>/<accountName>')
+def get_person_details(domain, accountName):
+        result = adConnection(domain=domain).search_by_account_name(account_name=accountName)
+        print(result)
 
-
-@cli.command()
-@pass_ad
 def unlock_account(ad):
     if ad.unlock_account(account_name=ad.accountName):
         print("Your account has been unlocked.")
         return
     print("Your password has not been unlocked.")
-
-if __name__ == "__main__":
-    cli(obj={})
-
-
-def main():
-    cli(obj={})
 

@@ -10,7 +10,7 @@ setup(name='ADAccountManager',
       author='woodj22',
       author_email='joe.wood@bbc.co.uk',
       license='MIT',
-      install_requires=['ldap3', 'Click'],
+      install_requires=['ldap3', 'Flask'],
       entry_points='''
       [console_scripts]
       ADAccountManager=start:main
