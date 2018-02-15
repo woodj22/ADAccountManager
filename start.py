@@ -28,14 +28,20 @@ def change_password(ad, new_password):
         return
     print("your password has not been changed.")
 
-@app.route('/<domain>/<accountName>')
-def get_person_details(domain, accountName):
-        result = adConnection(domain=domain).search_by_account_name(account_name=accountName)
-        print(result)
+@app.route('/<domain>/<account_name>')
+def get_person_details(domain, account_name):
+        return "user %s" % account_name
+        result = adConnection(domain=domain).search_by_account_name(account_name=account_name)
+        return result
 
+@app.route('/')
+def hello():
+    return 'hello world'
 def unlock_account(ad):
     if ad.unlock_account(account_name=ad.accountName):
         print("Your account has been unlocked.")
         return
     print("Your password has not been unlocked.")
 
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80)

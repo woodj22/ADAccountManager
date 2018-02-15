@@ -11,4 +11,4 @@ EXPOSE 80
 ENV __name__ __main__
 
 
-CMD ["python", "start.py", "--account_name=woodj22", "unlock_account"]
+CMD ["python", "start.py"]
