@@ -1,8 +1,7 @@
 from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD, LDAP_SERVER_DEFAULT_ADDRESS, LDAP_SERVER_DEFAULT_DN, LDAP_SERVER_DETAILS
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
-from flask import Flask
-
+from flask import Flask, jsonify, json
 
 def get_domain_server(domain):
     if domain in LDAP_SERVER_DETAILS:
@@ -11,11 +10,10 @@ def get_domain_server(domain):
         return Server(LDAP_SERVER_DEFAULT_ADDRESS, get_info=ALL), LDAP_SERVER_DEFAULT_DN
 
 
-
 app = Flask(__name__)
 
 
-def adConnection(admin_user, admin_password, domain, base_dn, server_address):
+def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADMIN_PASSWORD, base_dn=None, server_address=None):
     if None not in (base_dn, server_address):
         server = Server(server_address, get_info=ALL), base_dn
     else:
@@ -30,12 +28,12 @@ def change_password(ad, new_password):
 
 @app.route('/<domain>/<account_name>')
 def get_person_details(domain, account_name):
-        return "user %s" % account_name
-        result = adConnection(domain=domain).search_by_account_name(account_name=account_name)
-        return result
+        value = adConnection(domain=domain).search_by_account_name(account_name=account_name)
+        return json.dumps(dict(value['attributes']))
 
 @app.route('/')
 def hello():
+    # return 'No need to rebuild image'
     return 'hello world'
 def unlock_account(ad):
     if ad.unlock_account(account_name=ad.accountName):
