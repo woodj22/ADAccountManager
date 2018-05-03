@@ -1,7 +1,8 @@
 from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD, LDAP_SERVER_DEFAULT_ADDRESS, LDAP_SERVER_DEFAULT_DN, LDAP_SERVER_DETAILS
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
-from flask import Flask, jsonify, json
+from flask import Flask, jsonify, json, Response
+from flask_cors import CORS
 
 def get_domain_server(domain):
     if domain in LDAP_SERVER_DETAILS:
@@ -11,7 +12,7 @@ def get_domain_server(domain):
 
 
 app = Flask(__name__)
-
+CORS(app)
 
 def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADMIN_PASSWORD, base_dn=None, server_address=None):
     if None not in (base_dn, server_address):
@@ -31,6 +32,10 @@ def get_person_details(domain, account_name):
         value = adConnection(domain=domain).search_by_account_name(account_name=account_name)
         return json.dumps(dict(value['attributes']))
 
+@app.route('/user')
+def return_simple_json():
+    return Response(jsonify({'username': 'woodj22'}), content_type='application/json')
+
 @app.route('/')
 def hello():
     # return 'No need to rebuild image'
@@ -42,4 +47,4 @@ def unlock_account(ad):
     print("Your password has not been unlocked.")
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8080)
