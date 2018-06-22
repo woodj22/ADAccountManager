@@ -1,7 +1,7 @@
 from config import LDAP_ADMIN_USERNAME, LDAP_ADMIN_PASSWORD, LDAP_SERVER_DEFAULT_ADDRESS, LDAP_SERVER_DEFAULT_DN, LDAP_SERVER_DETAILS
 from activedirectory.active_directory import ActiveDirectory
 from ldap3 import Server, ALL
-from flask import Flask, jsonify, json, Response
+from flask import Flask, jsonify, json, Response, request
 from flask_cors import CORS
 
 def get_domain_server(domain):
@@ -21,16 +21,19 @@ def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADM
         server = get_domain_server(domain)
     return ActiveDirectory(*server, admin_user, admin_password)
 
-def change_password(ad, new_password):
-    if ad.change_password(account_name=ad.accountName, new_password=new_password):
-        print("Your password has been changed. You just saved your company some money.")
-        return
+@app.route('/<domain>/<account_name>/changepassword', methods=['POST'])
+def change_password(domain, account_name):
+    print(request.form.get('new_password'))
+    # # if ad.change_password(account_name=ad.accountName, new_password=new_password):
+    # #     print("Your password has been changed. You just saved your company some money.")
+    # #     return
+    return Response('Your password has been changed.')
     print("your password has not been changed.")
 
 @app.route('/<domain>/<account_name>')
 def get_person_details(domain, account_name):
-        value = adConnection(domain=domain).search_by_account_name(account_name=account_name)
-        return json.dumps(dict(value['attributes']))
+        result = adConnection(domain=domain).search_by_account_name(account_name=account_name)
+        return json.dumps(dict(result))
 
 @app.route('/user')
 def return_simple_json():

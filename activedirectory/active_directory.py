@@ -14,7 +14,11 @@ class ActiveDirectory(Connection):
 
     def search_by_account_name(self, account_name):
         search_filter = "(&(objectCategory=Person)(objectClass=User)(samaccountname=" + account_name + "))"
-        return self.formatted_search(search_filter)
+        result = self.formatted_search(search_filter)
+        if 'raw_dn' in result:
+            return result['attributes']
+        else:
+            return {}
 
     def search_by_user_dn(self, user_dn):
         search_filter = "(distinguishedname=" + user_dn +")"
