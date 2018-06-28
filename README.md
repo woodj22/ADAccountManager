@@ -51,3 +51,10 @@ For any help just run `ADAccountManager` and it will return a list of all the co
 I would be happy for anyone to contribute or suggest any tweaks that should be done. You can contact me via email at joe.wood@bbc.co.uk or use github to create an issue.
 
 If you would like more functionalities to be added just let me know and i can add them when ever I get a minute.
+
+
+### Development
+
+to development run venv using `source venv/bin/activate` Everything is installed their so it should work fine.
+ running `flask run` will start the development server. the variables `FLASK_APP` and `FLASK_DEBUG` will have to be exported. using the `export` command
+`FLASK_APP` should equal `start.py` and the debug option is optional. but to turn on make it equal 1. Debug is pretty useful though. 

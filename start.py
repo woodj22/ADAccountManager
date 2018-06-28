@@ -4,6 +4,9 @@ from ldap3 import Server, ALL
 from flask import Flask, jsonify, json, Response, request
 from flask_cors import CORS
 
+from exceptions.InvalidUsage import InvalidUsage
+
+
 def get_domain_server(domain):
     if domain in LDAP_SERVER_DETAILS:
         return Server(LDAP_SERVER_DETAILS.get(domain)[0], get_info=ALL), LDAP_SERVER_DETAILS.get(domain)[1]
@@ -14,6 +17,12 @@ def get_domain_server(domain):
 app = Flask(__name__)
 CORS(app)
 
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
+
 def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADMIN_PASSWORD, base_dn=None, server_address=None):
     if None not in (base_dn, server_address):
         server = Server(server_address, get_info=ALL), base_dn
@@ -23,12 +32,18 @@ def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADM
 
 @app.route('/<domain>/<account_name>/changepassword', methods=['POST'])
 def change_password(domain, account_name):
-    print(request.form.get('new_password'))
-    # # if ad.change_password(account_name=ad.accountName, new_password=new_password):
-    # #     print("Your password has been changed. You just saved your company some money.")
-    # #     return
-    return Response('Your password has been changed.')
-    print("your password has not been changed.")
+    new_password = request.json.get('new_password')
+    print('new password: ' + new_password)
+    # if new_password is None:
+    #     raise InvalidUsage('new_password field not found in json POST content.')
+    try :
+        adConnection(domain).change_password(account_name=account_name, new_password=new_password)
+    except Exception as e:
+        print(str(e))
+    # if adConnection(domain).change_password(account_name=account_name, new_password=new_password):
+    #     print("Your password has been changed. You just saved your company some money.")
+    #     return
+    return Response('Your password has been changed', status=201)
 
 @app.route('/<domain>/<account_name>')
 def get_person_details(domain, account_name):
@@ -50,4 +65,4 @@ def unlock_account(ad):
     print("Your password has not been unlocked.")
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)

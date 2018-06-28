@@ -31,7 +31,11 @@ class ActiveDirectory(Connection):
         return self.search_by_account_name(account_name).get('dn')
 
     def change_password(self, account_name, new_password):
-        return self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
+        try :
+            self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
+        except No as e:
+            print(str(e))
+
 
     # def __del__(self):
         # print('unbind')
