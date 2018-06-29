@@ -33,16 +33,11 @@ def adConnection(domain, admin_user=LDAP_ADMIN_USERNAME, admin_password=LDAP_ADM
 @app.route('/<domain>/<account_name>/changepassword', methods=['POST'])
 def change_password(domain, account_name):
     new_password = request.json.get('new_password')
-    print('new password: ' + new_password)
-    # if new_password is None:
-    #     raise InvalidUsage('new_password field not found in json POST content.')
     try :
         adConnection(domain).change_password(account_name=account_name, new_password=new_password)
-    except Exception as e:
-        print(str(e))
-    # if adConnection(domain).change_password(account_name=account_name, new_password=new_password):
-    #     print("Your password has been changed. You just saved your company some money.")
-    #     return
+    except ValueError as e:
+        raise InvalidUsage(str(e))
+
     return Response('Your password has been changed', status=201)
 
 @app.route('/<domain>/<account_name>')

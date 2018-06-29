@@ -1,5 +1,7 @@
 from ldap3 import Connection, MODIFY_REPLACE
 
+from activedirectory.validate_password import ValidatePassword
+
 
 class ActiveDirectory(Connection):
 
@@ -31,17 +33,14 @@ class ActiveDirectory(Connection):
         return self.search_by_account_name(account_name).get('dn')
 
     def change_password(self, account_name, new_password):
-        try :
-            self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
-        except No as e:
-            print(str(e))
+        validator = ValidatePassword()
 
+        if validator.validate(new_password):
+            return self.extend.microsoft.modify_password(self.get_user_dn(account_name=account_name), new_password, None)
+        else:
+            raise ValueError(validator.exception_messages)
 
-    # def __del__(self):
-        # print('unbind')
-        # self.unbind()
-
-    @property
+    @staticmethod
     def attributes(self):
         return  [
             'samaccountname',

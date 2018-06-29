@@ -58,3 +58,4 @@ If you would like more functionalities to be added just let me know and i can ad
 to development run venv using `source venv/bin/activate` Everything is installed their so it should work fine.
  running `flask run` will start the development server. the variables `FLASK_APP` and `FLASK_DEBUG` will have to be exported. using the `export` command
 `FLASK_APP` should equal `start.py` and the debug option is optional. but to turn on make it equal 1. Debug is pretty useful though. 
+One line comman: `FLASK_ENV=development FLASK_APP=start.py flask run`
