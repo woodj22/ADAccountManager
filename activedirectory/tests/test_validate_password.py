@@ -40,12 +40,14 @@ class TestValidatePassword(unittest.TestCase):
         has_not_spaces = ValidatePassword().has_no_spaces('Uddwi ho7')
         self.assertFalse(has_not_spaces)
 
-    def test_it_validates_a_string(self):
+    def test_it_validates_a_string_and_returns_true_if_all_validation_schema_is_met(self):
         validator = ValidatePassword()
-        validator.validate('oha sdf')
-        i = validator.exception_messages
-        print(i)
+        result = validator.validate('ohasd&dieorSf')
+        self.assertTrue(result)
 
+    def test_it_returns_correct_exception_messages_list_when_validation_fails_with_space(self):
+        validator = ValidatePassword().validate('ohas &dieorSf')
+        self.assertIn('Your password cannot contain a space.', validator.exception_messages)
 
 if __name__ == '__main__':
     unittest.main()
